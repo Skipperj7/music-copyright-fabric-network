@@ -120,8 +120,8 @@ services:
       - CORE_PEER_LISTENADDRESS=0.0.0.0:11051
       - CORE_PEER_CHAINCODEADDRESS=peer0.org3.example.com:11052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:11052
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org3.example.com:12051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org3.example.com:11051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.org3.example.com:12051
       - CORE_PEER_LOCALMSPID=Org3MSP
     volumes:
         - /var/run/:/host/var/run/
@@ -130,6 +130,8 @@ services:
         - peer0.org3.example.com:/var/hyperledger/production
     ports:
       - 11051:11051
+    networks:
+      - byfn
 
   peer1.org3.example.com:
     container_name: peer1.org3.example.com
@@ -139,11 +141,11 @@ services:
     environment:
       - CORE_PEER_ID=peer1.org3.example.com
       - CORE_PEER_ADDRESS=peer1.org3.example.com:12051
-      - CORE_PEER_LISTENADDRESS=0.0.0.0:10051
+      - CORE_PEER_LISTENADDRESS=0.0.0.0:12051
       - CORE_PEER_CHAINCODEADDRESS=peer1.org3.example.com:12052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:12052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org3.example.com:12051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org3.example.com:11051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.org3.example.com:12051
       - CORE_PEER_LOCALMSPID=Org3MSP
     volumes:
         - /var/run/:/host/var/run/
@@ -152,3 +154,5 @@ services:
         - peer1.org3.example.com:/var/hyperledger/production
     ports:
       - 12051:12051
+    networks:
+      - byfn
