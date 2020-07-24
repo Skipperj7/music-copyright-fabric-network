@@ -43,4 +43,3 @@ services:
         - orderer3.example.com:/var/hyperledger/production/orderer
     ports:
     - 9050:7050
-

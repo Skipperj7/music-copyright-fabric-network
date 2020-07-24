@@ -34,7 +34,7 @@ peers:
       ssl-target-name-override: peer1.org${ORG}.example.com
       hostnameOverride: peer1.org${ORG}.example.com
   peer2.org${ORG}.example.com:
-    url: grpcs://localhost:${P2PORT}
+    url: grpcs://localhost:${P1PORT}
     tlsCACerts:
       pem: |
         ${PEERPEM}
