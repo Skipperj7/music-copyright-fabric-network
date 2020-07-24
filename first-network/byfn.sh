@@ -222,6 +222,7 @@ function upgradeNetwork() {
       COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_CA}"
       export BYFN_CA1_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/org1.example.com/ca && ls *_sk)
       export BYFN_CA2_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/org2.example.com/ca && ls *_sk)
+      export BYFN_CA3_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/org3.example.com/ca && ls *_sk)
     fi
     if [ "${CONSENSUS_TYPE}" == "kafka" ]; then
       COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_KAFKA}"
@@ -241,7 +242,7 @@ function upgradeNetwork() {
     docker cp -a orderer.example.com:/var/hyperledger/production/orderer $LEDGERS_BACKUP/orderer.example.com
     docker-compose $COMPOSE_FILES up -d --no-deps orderer.example.com
 
-    for PEER in peer0.org1.example.com peer1.org1.example.com peer0.org2.example.com peer1.org2.example.com; do
+    for PEER in peer0.org1.example.com peer1.org1.example.com peer0.org2.example.com peer1.org2.example.com peer0.org3.example.com peer1.org3.example.com; do
       echo "Upgrading peer $PEER"
 
       # Stop the peer and backup its ledger
@@ -321,6 +322,10 @@ function replacePrivateKey() {
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR"
   sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
+  cd crypto-config/peerOrganizations/org3.example.com/ca/
+  PRIV_KEY=$(ls *_sk)
+  cd "$CURRENT_DIR"
+  sed $OPTS "s/CA3_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
   # If MacOSX, remove the temporary backup of the docker-compose file
   if [ "$ARCH" == "Darwin" ]; then
     rm docker-compose-e2e.yamlt
@@ -478,6 +483,21 @@ function generateChannelArtifacts() {
   set +x
   if [ $res -ne 0 ]; then
     echo "Failed to generate anchor peer update for Org2MSP..."
+    exit 1
+  fi
+  echo
+
+  echo
+  echo "#################################################################"
+  echo "#######    Generating anchor peer update for Org3MSP   ##########"
+  echo "#################################################################"
+  set -x
+  configtxgen -profile TwoOrgsChannel -outputAnchorPeersUpdate \
+    ./channel-artifacts/Org3MSPanchors.tx -channelID $CHANNEL_NAME -asOrg Org3MSP
+  res=$?
+  set +x
+  if [ $res -ne 0 ]; then
+    echo "Failed to generate anchor peer update for Org3MSP..."
     exit 1
   fi
   echo
