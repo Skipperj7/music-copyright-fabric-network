@@ -50,7 +50,7 @@ class FabCar extends Contract {
             owner,
         };
 
-        await ctx.stub.putState(musicNumber, Buffer.from(JSON.stringify(music)));
+        await ctx.stub.putState('music' + musicNumber, Buffer.from(JSON.stringify(music)));
         console.info('============= END : Create Music Entry ===========');
     }
 

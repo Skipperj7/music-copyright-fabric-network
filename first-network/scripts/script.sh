@@ -61,7 +61,7 @@ createChannel() {
 
 joinChannel () {
 	
-	for peer in 0 1; do
+	for peer in 0 0; do
 		joinChannelWithRetry $peer 1
 		echo "===================== peer${peer}.org1 joined channel '$CHANNEL_NAME' ===================== "
 		sleep $DELAY

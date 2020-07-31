@@ -43,7 +43,7 @@ async function main() {
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         var fs = require('fs');
         const values = [];
-        fs.readFile('your_file.txt', 'utf8', function(err, data) {
+        fs.readFile('your_file.json', 'utf8', function(err, data) {
             if (err) throw err;
             contract.submitTransaction('createMusic', 'music2', JSON.stringify(data), date+' '+time, 'copyrightID2Here', 'owner2Here');
             
