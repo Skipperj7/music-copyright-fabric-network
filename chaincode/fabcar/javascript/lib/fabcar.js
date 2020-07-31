@@ -39,11 +39,11 @@ class FabCar extends Contract {
         return musicAsBytes.toString();
     }
 
-    async createMusic(ctx, musicNumber, hashes, owner, date, copyrightID) {
+    async createMusic(ctx, musicNumber, hash, owner, date, copyrightID) {
         console.info('============= START : Create Music Entry ===========');
-
+        
         const music = {
-            hashes,
+            hash,
             docType: 'music',
             date,
             copyrightID,

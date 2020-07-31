@@ -41,7 +41,15 @@ async function main() {
         var today = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        await contract.submitTransaction('createMusic', 'music2', 'Hashes2Here', date+' '+time, 'copyrightID2Here', 'owner2Here');
+        var fs = require('fs');
+        const values = [];
+        fs.readFile('your_file.txt', 'utf8', function(err, data) {
+            if (err) throw err;
+            contract.submitTransaction('createMusic', 'music2', JSON.stringify(data), date+' '+time, 'copyrightID2Here', 'owner2Here');
+            
+        });
+        
+        
         console.log('Transaction has been submitted');
 
         // Disconnect from the gateway.
